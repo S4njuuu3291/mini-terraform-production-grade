@@ -1,0 +1,29 @@
+name: CI-CD Workflow
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+jobs:
+    terraform:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            id-token: write
+
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Set up Terraform
+          uses: hashicorp/setup-terraform@v3
+
+        - name: Terraform Init
+          working-directory: terraform/environments/dev
+          run: terraform init
+
+        - name: Terraform Plan
+          working-directory: terraform/environments/dev
+          run: terraform plan
